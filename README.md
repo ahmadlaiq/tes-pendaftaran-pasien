@@ -52,25 +52,8 @@ Sistem pendaftaran pasien sederhana berbasis web dan RESTful API untuk klinik/pu
 - **Password**: `password`
 
 ## Dokumentasi API
-
-Semua endpoint API (kecuali `/api/login`) membutuhkan header `Authorization: Bearer {token}`.
-
-### 1. Autentikasi
-- **POST** `/api/login`
-  - Body: `{ "email", "password" }`
-  - Response: `{ status, message, data: { token, user } }`
-
-### 2. Manajemen Pasien
-- **GET** `/api/pasien` : Daftar pasien (Query param `q` untuk cari nama/NIK).
-- **POST** `/api/pasien` : Tambah pasien baru.
-- **GET** `/api/pasien/{id}` : Detail pasien.
-- **PUT** `/api/pasien/{id}` : Update data pasien.
-- **DELETE** `/api/pasien/{id}` : Hapus pasien.
-
-### 3. Pendaftaran Kunjungan
-- **POST** `/api/pendaftaran` : Buat pendaftaran baru.
-- **GET** `/api/pendaftaran` : Daftar kunjungan (Filter `tanggal` & `poli_id`).
-- **PATCH** `/api/pendaftaran/{id}/status` : Ubah status (`Menunggu`, `Dilayani`, `Selesai`).
+Dokumentasi lengkap mengenai endpoint API, payload, dan response dapat dilihat pada file berikut:
+[**documentation/README.md**](documentation/README.md)
 
 ## Pengujian (Testing)
 Jalankan perintah berikut untuk mengeksekusi Feature Test:

@@ -13,7 +13,7 @@ Sistem pendaftaran pasien sederhana berbasis web dan RESTful API untuk klinik/pu
 ## Tech Stack
 - Laravel 12.x
 - PHP 8.2+
-- PostgreSQL
+- MySQL
 - Tailwind CSS (via Laravel Breeze)
 - Sanctum (API Auth)
 - DomPDF (Laporan PDF)
@@ -77,5 +77,3 @@ Jalankan perintah berikut untuk mengeksekusi Feature Test:
 ```bash
 php artisan test --filter RegistrationTest
 ```
-
----

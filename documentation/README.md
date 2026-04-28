@@ -7,6 +7,13 @@ Dokumentasi ini menjelaskan endpoint API yang tersedia, parameter yang dibutuhka
 - **Format Response**: JSON
 - **Autentikasi**: Laravel Sanctum (Token-based). Gunakan header `Authorization: Bearer {token}` untuk semua endpoint kecuali login.
 
+## 🚀 Swagger Documentation
+Dokumentasi API juga tersedia dalam format Swagger/OpenAPI:
+- [**Swagger YAML**](swagger.yaml)
+- [**Swagger JSON**](swagger.json)
+
+Anda dapat mengimpor file ini ke [Swagger Editor](https://editor.swagger.io/) atau Postman untuk mencoba API secara interaktif.
+
 ---
 
 ## 1. Autentikasi

@@ -1,0 +1,315 @@
+openapi: 3.0.0
+info:
+  title: Sistem Pendaftaran Pasien API
+  description: Dokumentasi RESTful API untuk Sistem Pendaftaran Pasien Klinik/Puskesmas.
+  version: 1.0.0
+servers:
+  - url: http://localhost/api
+    description: Local Server
+paths:
+  /login:
+    post:
+      tags:
+        - Autentikasi
+      summary: Login
+      description: Digunakan untuk mendapatkan token akses.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              required:
+                - email
+                - password
+              properties:
+                email:
+                  type: string
+                  format: email
+                  example: admin@klinik.com
+                password:
+                  type: string
+                  format: password
+                  example: password
+              type: object
+        required: true
+      responses:
+        '200':
+          description: Login berhasil
+          content:
+            application/json:
+              schema:
+                properties:
+                  status:
+                    type: string
+                    example: success
+                  message:
+                    type: string
+                    example: Login berhasil
+                  data:
+                    properties:
+                      token:
+                        type: string
+                      user:
+                        type: object
+                    type: object
+                type: object
+        '401':
+          description: Email atau password salah
+  /pasien:
+    get:
+      tags:
+        - Manajemen Pasien
+      summary: Daftar Pasien
+      description: Mengambil daftar pasien dengan pagination dan pencarian.
+      parameters:
+        - name: q
+          in: query
+          description: Pencarian berdasarkan Nama atau NIK
+          required: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Daftar pasien berhasil diambil
+          content:
+            application/json:
+              schema:
+                properties:
+                  status:
+                    type: string
+                    example: success
+                  message:
+                    type: string
+                    example: Daftar pasien berhasil diambil
+                  data:
+                    type: object
+                type: object
+      security:
+        - bearerAuth: []
+    post:
+      tags:
+        - Manajemen Pasien
+      summary: Tambah Pasien Baru
+      description: Menambahkan data pasien baru ke sistem.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              required:
+                - nama_lengkap
+                - nik
+                - tanggal_lahir
+                - jenis_kelamin
+                - alamat
+                - nomor_telepon
+              properties:
+                nama_lengkap:
+                  type: string
+                  example: Ani Wijaya
+                nik:
+                  type: string
+                  example: 3201234567890001
+                tanggal_lahir:
+                  type: string
+                  format: date
+                  example: '1995-05-15'
+                jenis_kelamin:
+                  type: string
+                  example: Perempuan
+                alamat:
+                  type: string
+                  example: Jl. Mawar No. 10
+                nomor_telepon:
+                  type: string
+                  example: '08571234567'
+              type: object
+        required: true
+      responses:
+        '201':
+          description: Pasien berhasil ditambahkan
+          content:
+            application/json:
+              schema:
+                properties:
+                  status:
+                    type: string
+                    example: success
+                  message:
+                    type: string
+                    example: Pasien berhasil ditambahkan
+                  data:
+                    type: object
+                type: object
+        '422':
+          description: Validasi gagal
+      security:
+        - bearerAuth: []
+  /pasien/{id}:
+    get:
+      tags:
+        - Manajemen Pasien
+      summary: Detail Pasien
+      description: Mengambil informasi detail pasien berdasarkan ID.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Detail pasien berhasil diambil
+        '404':
+          description: Pasien tidak ditemukan
+      security:
+        - bearerAuth: []
+    put:
+      tags:
+        - Manajemen Pasien
+      summary: Update Pasien
+      description: Memperbarui data pasien yang sudah ada.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              properties:
+                nama_lengkap:
+                  type: string
+                alamat:
+                  type: string
+              type: object
+      responses:
+        '200':
+          description: Data pasien berhasil diperbarui
+        '404':
+          description: Pasien tidak ditemukan
+      security:
+        - bearerAuth: []
+    delete:
+      tags:
+        - Manajemen Pasien
+      summary: Hapus Pasien
+      description: Menghapus data pasien dari sistem.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Pasien berhasil dihapus
+        '404':
+          description: Pasien tidak ditemukan
+      security:
+        - bearerAuth: []
+  /pendaftaran:
+    get:
+      tags:
+        - Pendaftaran Kunjungan
+      summary: Daftar Pendaftaran Kunjungan
+      description: Mengambil daftar pendaftaran kunjungan dengan filter tanggal dan poli.
+      parameters:
+        - name: tanggal
+          in: query
+          description: Filter tanggal (YYYY-MM-DD)
+          schema:
+            type: string
+            format: date
+        - name: poli_id
+          in: query
+          description: Filter ID Poli
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Daftar pendaftaran berhasil diambil
+      security:
+        - bearerAuth: []
+    post:
+      tags:
+        - Pendaftaran Kunjungan
+      summary: Buat Pendaftaran Baru
+      description: Mendaftarkan pasien ke poli tertentu.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              required:
+                - pasien_id
+                - poli_id
+                - tanggal_kunjungan
+                - keluhan
+              properties:
+                pasien_id:
+                  type: integer
+                  example: 1
+                poli_id:
+                  type: integer
+                  example: 2
+                tanggal_kunjungan:
+                  type: string
+                  format: date
+                  example: '2026-04-28'
+                keluhan:
+                  type: string
+                  example: Sakit gigi geraham kanan
+              type: object
+        required: true
+      responses:
+        '201':
+          description: Pendaftaran berhasil dibuat
+        '422':
+          description: Validasi gagal
+      security:
+        - bearerAuth: []
+  /pendaftaran/{id}/status:
+    patch:
+      tags:
+        - Pendaftaran Kunjungan
+      summary: Ubah Status Kunjungan
+      description: Memperbarui status pendaftaran kunjungan.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              required:
+                - status
+              properties:
+                status:
+                  type: string
+                  enum:
+                    - Menunggu
+                    - Dilayani
+                    - Selesai
+                  example: Dilayani
+              type: object
+        required: true
+      responses:
+        '200':
+          description: Status pendaftaran berhasil diperbarui
+        '404':
+          description: Pendaftaran tidak ditemukan
+      security:
+        - bearerAuth: []
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+tags:
+  - name: Autentikasi
+  - name: Manajemen Pasien
+  - name: Pendaftaran Kunjungan
